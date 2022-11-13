@@ -109,9 +109,10 @@ function plot_distribution(dist, dim)
 
     max_step = maximum(dist)
     xlim_max = mean(dist)
-    plt = histogram(step_dist_filt, title = "Distribution of Random Walks in $dim Dimension(s)", xlabel="Number of steps", ylabel= "Number of times walk returns to origin", xlims = (0,xlim_max))
+#    xlim_max = 100
+    plt = histogram(step_dist_filt, title = "Distribution of Random Walks in $dim Dimension(s)", label="Steps to return to origin", xlabel="Number of steps", ylabel= "Number of times walk returns to origin", xlims = (0,xlim_max))
 
-    log_plt = histogram(step_dist_filt, title = "Distribution of Random Walks in $dim Dimension(s) (Log)", xlabel="Number of steps", ylabel= "Number of times walk returns to origin (Log)", xlims = (0,max_step), yaxis=:log)
+    log_plt = histogram(step_dist_filt, title = "Distribution of Random Walks in $dim Dimension(s) (Log)", label="Steps to return to origin",xlabel="Number of steps", ylabel= "Number of times walk returns to origin (Log)", xlims = (0,max_step), yaxis=:log)
 
 
     return plt, log_plt
@@ -123,7 +124,7 @@ end
 
 p = 1/2 # Probability to step in the positive direction
 m = 500 # Number of random walks to perform for our distribution
-cutoff = 100000 # Number of steps at which our random walk terminates
+cutoff = 10000 # Number of steps at which our random walk terminates
 
 for d in [1,2,3,6]
     N = 0 # N is step counter, initialized to 0
