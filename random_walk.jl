@@ -65,33 +65,44 @@ function rand_d_walk(prob, dim, cutoff)
             if position == zero_vector # Check if position vector is at the origin. If so, break our of the while loop.
                 break
             end
-            if N > cutoff
+            if N > cutoff # Terminates the loop if step number exceeds cutoff. Prevents infinite walks.
                 break
             end
     end
-    return N+1
+    return N # Returns number of steps taken to return to origin.
 end
 
-function sample_walks(walk_arr, size, prob, dim, cutoff)
+#=
+sample_walks loops through rand_d_walk a chosen number of times, returning an array of step numbers taken to return to origin.
+
+Arguments:
+    step_arr: array for step sizes
+    size: number of walks to perform
+    prob, dim, cutoff: arguments for rand_d_walk, use described in documentation for rand_d_walk.
+=#
+
+function sample_walks(step_arr, size, prob, dim, cutoff)
+    # For loop performs rand_d_walks, number of walks according to size argument.
     for i in 1:size
-        M = rand_d_walk(prob, dim, cutoff)
-        push!(walk_arr, M)
+        M = rand_d_walk(prob, dim, cutoff) # Performs random walk.
+        push!(step_arr, M) # Pushes step number to array.
     end
     
-    return walk_arr
+    return step_arr # Returns array of step numbers.
 end
 
 
 p = 1/2 # Probability to step in the positive direction
 N = 0 # N is step counter, initialized to 0
-m = 100 # Number of random walks to perform for our distribution
-cutoff = 1000 # Number of steps at which our random walk terminates
+m = 1 # Number of random walks to perform for our distribution
+cutoff = 100000 # Number of steps at which our random walk terminates
 step_dist = [] # Initializing distribution of step sizes
 
-#A = rand_d_walk(p,2, cutoff)
+A = rand_d_walk(p,1, cutoff)
+print(A)
 
-step_dist = sample_walks(step_dist, m, p, 1, cutoff)
-histogram(step_dist)
+#step_dist = sample_walks(step_dist, m, p, 1, cutoff)
+#histogram(step_dist)
 
 #A = rand_d_walk(p, 1)
 #print("number of steps\n")
