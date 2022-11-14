@@ -108,11 +108,12 @@ end
 function plot_distribution(dist, dim, prob)
 
     max_step = maximum(dist)
-    xlim_max = mean(dist)
+    xlim_max = mean(dist) + std(dist)
+    form_prob = round(prob, digits = 2)
 #    xlim_max = 100
-    plt = histogram(dist, title = "Distribution of Random Walks in $dim Dimension(s)\np = $prob", label="Steps to return to origin", xlabel="Number of steps", ylabel= "Number of times walk returns to origin", xlims = (0,xlim_max))
+    plt = histogram(dist, title = "Distribution of Random Walks in $dim Dimension(s)\np = $form_prob", label="Steps to return to origin", xlabel="Number of steps", ylabel= "Number of times walk returns to origin", xlims = (0,xlim_max))
 
-    log_plt = histogram(dist, title = "Distribution of Random Walks in $dim Dimension(s) (Log)\np = $prob", label="Steps to return to origin",xlabel="Number of steps", ylabel= "Number of times walk returns to origin (Log)", xlims = (0,max_step), yaxis=:log)
+    log_plt = histogram(dist, title = "Distribution of Random Walks in $dim Dimension(s) (Log)\np = $form_prob", label="Steps to return to origin",xlabel="Number of steps", ylabel= "Number of times walk returns to origin (Log)", xlims = (0,max_step), yaxis=:log)
 
 
     return plt, log_plt
@@ -123,18 +124,33 @@ function print_walk_stats(size, dim, prob, conv, div, prob_conv)
 end
 
 p = 1/2 # Probability to step in the positive direction
-m = 500 # Number of random walks to perform for our distribution
+m = 10000 # Number of random walks to perform for our distribution
 cutoff = 10000 # Number of steps at which our random walk terminates
 
-for d in [1,2,3,6]
-    N = 0 # N is step counter, initialized to 0
-    step_dist = [] # Initializing distribution of step sizes
-    step_dist_filt = []
-    step_dist = sample_walks(step_dist, m, p, d, cutoff)
-    step_dist_filt = filter(x -> x ≠ cutoff + 1, step_dist) # Removes entries where step number = cutoff
-    conv, div, prob_conv = prob_convergence(step_dist, step_dist_filt)
-    print_walk_stats(m, d, p, conv, div, prob_conv)
-    plt, log_plt = plot_distribution(step_dist_filt, d, p)
-    display(plt)
-    display(log_plt)
+for p in [1/2, 5/8, 2/3]
+    for d in [1,2,3]
+        N = 0 # N is step counter, initialized to 0
+        step_dist = [] # Initializing distribution of step sizes
+        step_dist_filt = []
+        step_dist = sample_walks(step_dist, m, p, d, cutoff)
+        step_dist_filt = filter(x -> x ≠ cutoff + 1, step_dist) # Removes entries where step number = cutoff
+        conv, div, prob_conv = prob_convergence(step_dist, step_dist_filt)
+        print_walk_stats(m, d, p, conv, div, prob_conv)
+        plt, log_plt = plot_distribution(step_dist_filt, d, p)
+        display(plt)
+        display(log_plt)
+    end
 end
+
+p = 1/2
+d = 6
+N = 0 # N is step counter, initialized to 0
+step_dist = [] # Initializing distribution of step sizes
+step_dist_filt = []
+step_dist = sample_walks(step_dist, m, p, d, cutoff)
+step_dist_filt = filter(x -> x ≠ cutoff + 1, step_dist) # Removes entries where step number = cutoff
+conv, div, prob_conv = prob_convergence(step_dist, step_dist_filt)
+print_walk_stats(m, d, p, conv, div, prob_conv)
+plt, log_plt = plot_distribution(step_dist_filt, d, p)
+display(plt)
+display(log_plt)
