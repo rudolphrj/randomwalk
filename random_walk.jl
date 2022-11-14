@@ -105,14 +105,14 @@ function prob_convergence(step_arr, step_arr_filt)
     return num_converge, num_diverge, prob_converge
 end
 
-function plot_distribution(dist, dim)
+function plot_distribution(dist, dim, prob)
 
     max_step = maximum(dist)
     xlim_max = mean(dist)
 #    xlim_max = 100
-    plt = histogram(step_dist_filt, title = "Distribution of Random Walks in $dim Dimension(s)", label="Steps to return to origin", xlabel="Number of steps", ylabel= "Number of times walk returns to origin", xlims = (0,xlim_max))
+    plt = histogram(dist, title = "Distribution of Random Walks in $dim Dimension(s)\np = $prob", label="Steps to return to origin", xlabel="Number of steps", ylabel= "Number of times walk returns to origin", xlims = (0,xlim_max))
 
-    log_plt = histogram(step_dist_filt, title = "Distribution of Random Walks in $dim Dimension(s) (Log)", label="Steps to return to origin",xlabel="Number of steps", ylabel= "Number of times walk returns to origin (Log)", xlims = (0,max_step), yaxis=:log)
+    log_plt = histogram(dist, title = "Distribution of Random Walks in $dim Dimension(s) (Log)\np = $prob", label="Steps to return to origin",xlabel="Number of steps", ylabel= "Number of times walk returns to origin (Log)", xlims = (0,max_step), yaxis=:log)
 
 
     return plt, log_plt
@@ -134,7 +134,7 @@ for d in [1,2,3,6]
     step_dist_filt = filter(x -> x ≠ cutoff + 1, step_dist) # Removes entries where step number = cutoff
     conv, div, prob_conv = prob_convergence(step_dist, step_dist_filt)
     print_walk_stats(m, d, p, conv, div, prob_conv)
-    plt, log_plt = plot_distribution(step_dist_filt, d)
+    plt, log_plt = plot_distribution(step_dist_filt, d, p)
     display(plt)
     display(log_plt)
 end

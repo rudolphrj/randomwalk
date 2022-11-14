@@ -1,9 +1,12 @@
 \documentclass{article}
+\input{~/Documents/university/preamble.tex}
 \usepackage{geometry}[margin=1.0in]
-\usepackage{fouriernc}
+\usepackage[T1]{fontenc}
+\usepackage{tgpagella}
 \usepackage{siunitx}
 \usepackage{graphicx}
 \usepackage{hyperref}
+\usepackage{algpseudocode}
 \hypersetup{colorlinks=true,allcolors=blue}
 
 \title{Random Walks in $d$ Dimensions}
@@ -13,8 +16,57 @@
 
 \maketitle
 
-\section{Introduction}
-fjkela
+\section{Modeling the Random Walk}
+\subsection{Mathematical Definitions}
+A one-dimensional random walk my be modeled as a vector $\mathbf{V}_\text{walk}$ of dimension $n$, where $n$ is the number of steps taken in the walk. We write $\mathbf{V}_\text{walk}$ as 
+
+\begin{equation}
+    \mathbf{V}_\text{walk} = (x_1, x_2,\cdots , x_n)
+\end{equation}
+
+where $x_i = \pm 1$. We define the position vector at step number $n$ to be
+\begin{equation}
+    \mathbf{S}_n = \sum_{i=1}^n x_i.
+\end{equation}
+
+In one dimension, our position vector is a scalar. We may generalize the above to $d$ dimensions, then $\mathbf{V}_\text{walk}$ becomes a vector with entries being coordinates in $d$ dimensions;
+\begin{equation} 
+    \mathbf{V}_\text{walk} = \{(x_{1,1}, \cdots x_{1,d}), (x_{2,1}, \cdots x_{2,d}),\cdots , (x_{n,1}, \cdots x_{n,d})\}.
+\end{equation}
+Our position vector becomes
+\begin{equation}
+    \mathbf{S}_n = \sum_{i=1}^n (x_{i,1}, \cdots, x_{i,d}).
+\end{equation}
+
+We are interested in the case where the walk returns to the origin. In our defined quantities, this means that $\mathbf{V}_\text{walk}$ of step number $n$ is such that $\mathbf{S}_n$ is the zero vector in $\mathbb{R}^d$.
+
+\subsection{The Algorithm}
+
+To realize a $d$ dimensional random walk we begin by defining an axis set;
+\begin{equation}
+    A = \{1,2,3,\cdots, d\},
+\end{equation}
+and a direction set;
+\begin{equation}
+    D = \{1,-1\}.
+\end{equation}
+For example, in two dimensions the element $1 \in A$ may correspond to the $x$ axis in the $2d$ plane, where $2 \in A$ may correspond to the $y$ axis. Then, $\pm 1 \in D$ correspond to a positive or negative step of displacement 1 in whichever axis is selected.
+
+We now define $p \in [0,1]$ to be the probability to step in the positive direction, and $q = 1-p$ to be the probability to step in the negative direction.
+
+We may now enumerate the steps in our random walk Algorithm. Note that in the below, we may adjust the size of the axis set $A$ to simulate random walks in an arbitrary number of dimensions. We may also adjust $p$ to bias the walk.
+
+\textbf{Random walk Algorithm:}
+\begin{enumerate}
+    \item Initialize the position vector at $0$ steps to  $\mathbf{S}_0 = \mathbf{0}$.
+    \item Take an unbiased sample $a$ from $A$.
+    \item Take a sample $\delta$ from $D$, where $p$ is the probability to select $1$ and $q$ is the probability to select $-1$.
+    \item Increment the index of $\mathbf{S}$ by 1 and the  $a$-th coordinate of $\mathbf{S}$ by $\delta$.
+    \item Check is $\mathbf{S} = 0$. If so, return the number of steps taken so far. If not, repeat steps 2-4.
+\end{enumerate}
+
+This concludes the definition of our random walk algorithm.
+
 \section{Experimental Details}
 
 \section{Theory}
